@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Currency Converter</string>
+
+    <string-array name="currency1">
+        <item>USD</item>
+        <item>GBP</item>
+        <item>EUR</item>
+        <item>DKK</item>v
+        <item>SEK</item>
+        <item>AUD</item>
+        <item>CAD</item>
+        <item>JPY</item>
+
+    </string-array>
+    <string-array name="currency2">
+        <item>USD</item>
+        <item>GBP</item>
+        <item>EUR</item>
+        <item>DKK</item>v
+        <item>SEK</item>
+        <item>AUD</item>
+        <item>CAD</item>
+        <item>JPY</item>
+
+    </string-array>
+</resources>
