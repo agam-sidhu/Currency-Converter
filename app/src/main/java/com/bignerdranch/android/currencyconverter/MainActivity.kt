@@ -39,6 +39,174 @@ class MainActivity : AppCompatActivity() {
     private lateinit var conversionRateValue: String
     private var country: Array<String> = arrayOf("AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HRK", "HUF", "IDR", "ILS", "INR", "ISK", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "PLN", "RON", "RUB", "SEK", "SGD", "THB", "TRY", "USD", "ZAR")
 
+    private val currencyFullNameMap = mapOf(
+        "STN" to "São Tomé and Príncipe dobra",
+        "XAG" to "Silver (troy ounce)",
+        "XAU" to "Gold (troy ounce)",
+        "USDC" to "USD Coin",
+        "USDT" to "Tether",
+        "PLN" to "Polish złoty",
+        "UGX" to "Ugandan shilling",
+        "GGP" to "Guernsey pound",
+        "MWK" to "Malawian kwacha",
+        "NAD" to "Namibian dollar",
+        "ALL" to "Albanian lek",
+        "BHD" to "Bahraini dinar",
+        "JEP" to "Jersey pound",
+        "BWP" to "Botswana pula",
+        "MRU" to "Mauritanian ouguiya",
+        "BMD" to "Bermudian dollar",
+        "MNT" to "Mongolian tögrög",
+        "FKP" to "Falkland Islands pound",
+        "PYG" to "Paraguayan guaraní",
+        "AUD" to "Australian dollar",
+        "KYD" to "Cayman Islands dollar",
+        "RWF" to "Rwandan franc",
+        "WST" to "Samoan tālā",
+        "SHP" to "Saint Helena pound",
+        "SOS" to "Somali shilling",
+        "SSP" to "South Sudanese pound",
+        "BIF" to "Burundian franc",
+        "SEK" to "Swedish krona",
+        "CUC" to "Cuban convertible peso",
+        "BTN" to "Bhutanese ngultrum",
+        "MOP" to "Macanese pataca",
+        "XDR" to "Special drawing rights",
+        "IMP" to "Manx pound",
+        "INR" to "Indian rupee",
+        "BYN" to "Belarusian ruble",
+        "BOB" to "Bolivian boliviano",
+        "SRD" to "Surinamese dollar",
+        "GEL" to "Georgian lari",
+        "ZWL" to "Zimbabwean dollar",
+        "EUR" to "Euro",
+        "BBD" to "Barbadian dollar",
+        "RSD" to "Serbian dinar",
+        "SDG" to "Sudanese pound",
+        "VND" to "Vietnamese đồng",
+        "VES" to "Venezuelan bolívar",
+        "ZMW" to "Zambian kwacha",
+        "KGS" to "Kyrgyzstani som",
+        "HUF" to "Hungarian forint",
+        "BND" to "Brunei dollar",
+        "BAM" to "Bosnia and Herzegovina convertible mark",
+        "CVE" to "Cape Verdean escudo",
+        "BGN" to "Bulgarian lev",
+        "NOK" to "Norwegian krone",
+        "BRL" to "Brazilian real",
+        "JPY" to "Japanese yen",
+        "HRK" to "Croatian kuna",
+        "HKD" to "Hong Kong dollar",
+        "ISK" to "Icelandic króna",
+        "IDR" to "Indonesian rupiah",
+        "KRW" to "South Korean won",
+        "KHR" to "Cambodian riel",
+        "XAF" to "Central African CFA franc",
+        "CHF" to "Swiss franc",
+        "MXN" to "Mexican peso",
+        "PHP" to "Philippine peso",
+        "RON" to "Romanian leu",
+        "RUB" to "Russian ruble",
+        "SGD" to "Singapore dollar",
+        "AED" to "United Arab Emirates dirham",
+        "KWD" to "Kuwaiti dinar",
+        "CAD" to "Canadian dollar",
+        "PKR" to "Pakistani rupee",
+        "CLP" to "Chilean peso",
+        "CNY" to "Renminbi",
+        "COP" to "Colombian peso",
+        "AOA" to "Angolan kwanza",
+        "KMF" to "Comorian franc",
+        "CRC" to "Costa Rican colón",
+        "CUP" to "Cuban peso",
+        "GNF" to "Guinean franc",
+        "NZD" to "New Zealand dollar",
+        "EGP" to "Egyptian pound",
+        "DJF" to "Djiboutian franc",
+        "ANG" to "Netherlands Antillean guilder",
+        "DOP" to "Dominican peso",
+        "JOD" to "Jordanian dinar",
+        "AZN" to "Azerbaijani manat",
+        "SVC" to "Salvadoran colón",
+        "NGN" to "Nigerian naira",
+        "ERN" to "Eritrean nakfa",
+        "SZL" to "Swazi lilangeni",
+        "DKK" to "Danish krone",
+        "ETB" to "Ethiopian birr",
+        "FJD" to "Fijian dollar",
+        "XPF" to "CFP franc",
+        "GMD"
+
+                to "Gambian dalasi",
+        "AFN" to "Afghan afghani",
+        "GHS" to "Ghanaian cedi",
+        "GIP" to "Gibraltar pound",
+        "GTQ" to "Guatemalan quetzal",
+        "HNL" to "Honduran lempira",
+        "GYD" to "Guyanese dollar",
+        "HTG" to "Haitian gourde",
+        "XCD" to "Eastern Caribbean dollar",
+        "GBP" to "Pound sterling",
+        "AMD" to "Armenian dram",
+        "IRR" to "Iranian rial",
+        "JMD" to "Jamaican dollar",
+        "IQD" to "Iraqi dinar",
+        "KZT" to "Kazakhstani tenge",
+        "KES" to "Kenyan shilling",
+        "ILS" to "Israeli new shekel",
+        "LYD" to "Libyan dinar",
+        "LSL" to "Lesotho loti",
+        "LBP" to "Lebanese pound",
+        "LRD" to "Liberian dollar",
+        "AWG" to "Aruban florin",
+        "MKD" to "Macedonian denar",
+        "LAK" to "Lao kip",
+        "MGA" to "Malagasy ariary",
+        "ZAR" to "South African rand",
+        "MDL" to "Moldovan leu",
+        "MVR" to "Maldivian rufiyaa",
+        "MUR" to "Mauritian rupee",
+        "MMK" to "Burmese kyat",
+        "MAD" to "Moroccan dirham",
+        "XOF" to "West African CFA franc",
+        "MZN" to "Mozambican metical",
+        "MYR" to "Malaysian ringgit",
+        "OMR" to "Omani rial",
+        "NIO" to "Nicaraguan córdoba",
+        "NPR" to "Nepalese rupee",
+        "PAB" to "Panamanian balboa",
+        "PGK" to "Papua New Guinean kina",
+        "PEN" to "Peruvian sol",
+        "ARS" to "Argentine peso",
+        "SAR" to "Saudi riyal",
+        "QAR" to "Qatari riyal",
+        "SCR" to "Seychellois rupee",
+        "SLL" to "Sierra Leonean leone",
+        "LKR" to "Sri Lankan rupee",
+        "SBD" to "Solomon Islands dollar",
+        "VUV" to "Vanuatu vatu",
+        "USD" to "United States dollar",
+        "DZD" to "Algerian dinar",
+        "BDT" to "Bangladeshi taka",
+        "BSD" to "Bahamian dollar",
+        "BZD" to "Belize dollar",
+        "CDF" to "Congolese franc",
+        "UAH" to "Ukrainian hryvnia",
+        "YER" to "Yemeni rial",
+        "TMT" to "Turkmenistan manat",
+        "UZS" to "Uzbekistani soʻm",
+        "UYU" to "Uruguayan peso",
+        "CZK" to "Czech koruna",
+        "SYP" to "Syrian pound",
+        "TJS" to "Tajikistani somoni",
+        "TWD" to "New Taiwan dollar",
+        "TZS" to "Tanzanian shilling",
+        "TOP" to "Tongan paʻanga",
+        "TTD" to "Trinidad and Tobago dollar",
+        "THB" to "Thai baht",
+        "TRY" to "Turkish lira",
+        "TND" to "Tunisian dinar"
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState)
@@ -80,9 +248,13 @@ class MainActivity : AppCompatActivity() {
                 }
             })
             list.setOnItemClickListener { parent, view, position, id ->
-                convertFromDropdown.text = adapter.getItem(position)
+                val selectedCurrencyCode = adapter.getItem(position).toString()
+                convertFromDropdown.text = selectedCurrencyCode
+                convertFrom = selectedCurrencyCode
+                // Update the dropdown text to display the currency name
+                val currencyName = currencyFullNameMap[selectedCurrencyCode]
+                convertFromDropdown.text = currencyName ?: selectedCurrencyCode
                 fromDialog.dismiss()
-                convertFrom = adapter.getItem(position).toString()
             }
         }
 
@@ -110,9 +282,13 @@ class MainActivity : AppCompatActivity() {
                 }
             })
             list.setOnItemClickListener { parent, view, position, id ->
-                convertToDropdown.text = adapter.getItem(position)
+                val selectedCurrencyCode = adapter.getItem(position).toString()
+                convertToDropdown.text = selectedCurrencyCode
+                convertTo = selectedCurrencyCode
+                // Update the dropdown text to display the currency name
+                val currencyName = currencyFullNameMap[selectedCurrencyCode]
+                convertToDropdown.text = currencyName ?: selectedCurrencyCode
                 toDialog.dismiss()
-                convertTo = adapter.getItem(position).toString()
             }
 
         }

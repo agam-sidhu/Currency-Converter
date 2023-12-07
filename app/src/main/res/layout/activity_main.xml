@@ -41,6 +41,7 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:text="Convert from"
+			android:fontFamily="@font/convergence"
 			android:textColor="#000000"
 			android:textSize="24sp"
 			android:layout_marginTop="32dp"
@@ -53,7 +54,8 @@
 			android:layout_height="72dp"
 			android:layout_weight="1.0"
 			android:background="@android:drawable/editbox_background"
-			android:hint="Select Country"
+			android:hint="Select Currency"
+			android:fontFamily="@font/convergence"
 			android:textColor="#000000"
 			android:textSize="16sp"
 			app:drawableEndCompat="@drawable/baseline_arrow_drop_down_24"
@@ -69,6 +71,7 @@
 			android:layout_height="wrap_content"
 			android:text="Convert to"
 			android:textSize="24sp"
+			android:fontFamily="@font/convergence"
 			android:textColor="#000000"
 			android:layout_marginTop="16dp"
 			app:layout_constraintTop_toBottomOf="@+id/convertFromMenu"
@@ -77,11 +80,12 @@
 
 		<TextView
 			android:id="@+id/convertToMenu"
+			android:fontFamily="@font/convergence"
 			android:layout_width="0dp"
 			android:layout_height="72dp"
 			android:layout_weight="1.0"
 			android:background="@android:drawable/editbox_background"
-			android:hint="Select Country"
+			android:hint="Select Currency"
 			android:textColor="#000000"
 			android:textSize="16sp"
 			app:drawableEndCompat="@drawable/baseline_arrow_drop_down_24"
@@ -97,6 +101,7 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:text="Amount to Convert"
+			android:fontFamily="@font/convergence"
 			android:textColor="#000000"
 			android:textSize="24sp"
 			android:layout_marginTop="16dp"
@@ -126,6 +131,7 @@
 		<!-- Convert Button -->
 		<Button
 			android:id="@+id/convertButton"
+			android:fontFamily="@font/convergence"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="16dp"
@@ -139,6 +145,7 @@
 		<!-- Conversion Result -->
 		<TextView
 			android:id="@+id/conversionResult"
+			android:fontFamily="@font/convergence"
 			android:layout_width="0dp"
 			android:layout_height="35dp"
 			android:gravity="center"
@@ -150,6 +157,7 @@
 			app:layout_constraintEnd_toEndOf="parent" />
 		<TextView
 			android:id="@+id/conversionRateText"
+			android:fontFamily="@font/convergence"
 			android:layout_width="0dp"
 			android:layout_height="40dp"
 			android:layout_weight="1.0"
