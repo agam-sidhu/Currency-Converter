@@ -167,6 +167,30 @@
 			app:layout_constraintTop_toBottomOf="@+id/conversionResult"
 			app:layout_constraintStart_toStartOf="@id/conversionResult"
 			app:layout_constraintEnd_toEndOf="parent" />
+		<TextView
+			android:id="@+id/exchangeRate"
+			android:fontFamily="@font/convergence"
+			android:layout_width="0dp"
+			android:layout_height="35dp"
+			android:gravity="center"
+			android:text="Exchange Rate"
+			android:textSize="24sp"
+			android:textColor="#000000"
+			app:layout_constraintTop_toBottomOf="@+id/conversionRateText"
+			app:layout_constraintStart_toStartOf="@id/conversionRateText"
+			app:layout_constraintEnd_toEndOf="parent" />
+		<TextView
+			android:id="@+id/exchangeRateText"
+			android:fontFamily="@font/convergence"
+			android:layout_width="0dp"
+			android:layout_height="40dp"
+			android:layout_weight="1.0"
+			android:gravity="center"
+			android:textColor="#000000"
+			android:textSize="24sp"
+			app:layout_constraintTop_toBottomOf="@+id/exchangeRate"
+			app:layout_constraintStart_toStartOf="@id/exchangeRate"
+			app:layout_constraintEnd_toEndOf="parent" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

@@ -29,6 +29,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var convertToDropdown: TextView
     private lateinit var conversionRate: TextView
     private lateinit var resultTextView: TextView
+    private lateinit var exchangeRateView: TextView
+    private lateinit var exchangeRate: TextView
     private lateinit var amountToConvert: EditText
     private lateinit var convertButton: Button
     private lateinit var fromDialog: Dialog
@@ -217,6 +219,8 @@ class MainActivity : AppCompatActivity() {
         conversionRate = findViewById(id.conversionRateText)
         resultTextView = findViewById(id.conversionResult)
         amountToConvert = findViewById(id.amountToConvertEditText)
+        exchangeRate = findViewById(id.exchangeRate)
+        exchangeRateView = findViewById(id.exchangeRateText)
 
         //This might be an issue 16 minutes
         arrayList = ArrayList(country.asList())
@@ -339,10 +343,14 @@ class MainActivity : AppCompatActivity() {
 
                         runOnUiThread {
                             conversionRate.text = result.toString()
+                            exchangeRateView.text = "1 $convertFrom = $rate $convertTo"
+
                         }
                     } else {
                         runOnUiThread {
                             conversionRate.text = "Error: Rate not found in XML response."
+                            exchangeRate.text = "Exchange Rate: N/A"
+
                         }
                     }
                 } catch (e: Exception) {
