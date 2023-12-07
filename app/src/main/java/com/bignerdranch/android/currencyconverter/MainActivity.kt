@@ -135,7 +135,10 @@ class MainActivity : AppCompatActivity() {
                     val result = "" + round((conversionRateValue * amountToConvert),2)
 
                     // Assuming conversionRate is a TextView, set the result to it
-                    conversionRate.text = result
+                    runOnUiThread {
+                        conversionRate.text = result
+                    }
+
 
                     // If you need to return the result for some reason, you might want to use a callback or update the UI differently
                 } catch (e: JSONException) {
