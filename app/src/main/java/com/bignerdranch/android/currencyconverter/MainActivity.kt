@@ -136,9 +136,7 @@ class MainActivity : AppCompatActivity() {
         "ETB" to "Ethiopian birr",
         "FJD" to "Fijian dollar",
         "XPF" to "CFP franc",
-        "GMD"
-
-                to "Gambian dalasi",
+        "GMD" to "Gambian dalasi",
         "AFN" to "Afghan afghani",
         "GHS" to "Ghanaian cedi",
         "GIP" to "Gibraltar pound",
