@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.bignerdranch.android.currencyconverter.R.id
+import com.bignerdranch.android.currencyconverter.R.layout
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.StringReader
@@ -38,27 +40,28 @@ class MainActivity : AppCompatActivity() {
     private var country: Array<String> = arrayOf("AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HRK", "HUF", "IDR", "ILS", "INR", "ISK", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "PLN", "RON", "RUB", "SEK", "SGD", "THB", "TRY", "USD", "ZAR")
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(layout.activity_main)
 
-        convertFromDropdown = findViewById(R.id.convertFromMenu)
-        convertToDropdown = findViewById(R.id.convertToMenu)
-        convertButton = findViewById(R.id.convertButton)
-        conversionRate = findViewById(R.id.conversionRateText)
-        resultTextView = findViewById(R.id.conversionResult)
-        amountToConvert = findViewById(R.id.amountToConvertEditText)
+        convertFromDropdown = findViewById(id.convertFromMenu)
+        convertToDropdown = findViewById(id.convertToMenu)
+        convertButton = findViewById(id.convertButton)
+        conversionRate = findViewById(id.conversionRateText)
+        resultTextView = findViewById(id.conversionResult)
+        amountToConvert = findViewById(id.amountToConvertEditText)
 
         //This might be an issue 16 minutes
         arrayList = ArrayList(country.asList())
 
         convertFromDropdown.setOnClickListener {
             fromDialog = Dialog(this@MainActivity)
-            fromDialog.setContentView(R.layout.from_spinner)
+            fromDialog.setContentView(layout.from_spinner)
             fromDialog.window?.setLayout(650, 800)
             fromDialog.show()
 
-            val edit: EditText = fromDialog.findViewById(R.id.edit_text)
-            val list: ListView = fromDialog.findViewById(R.id.list_view)
+            val edit: EditText = fromDialog.findViewById(id.edit_text)
+            val list: ListView = fromDialog.findViewById(id.list_view)
 
             val adapter = ArrayAdapter(this@MainActivity, android.R.layout.simple_list_item_1, arrayList)
             list.adapter = adapter
@@ -85,12 +88,12 @@ class MainActivity : AppCompatActivity() {
 
         convertToDropdown.setOnClickListener {
             toDialog = Dialog(this@MainActivity)
-            toDialog.setContentView(R.layout.to_spinner)
+            toDialog.setContentView(layout.to_spinner)
             toDialog.window?.setLayout(650, 800)
             toDialog.show()
 
-            val edit: EditText = toDialog.findViewById(R.id.edit_text)
-            val list: ListView = toDialog.findViewById(R.id.list_view)
+            val edit: EditText = toDialog.findViewById(id.edit_text)
+            val list: ListView = toDialog.findViewById(id.list_view)
 
             val adapter = ArrayAdapter(this@MainActivity, android.R.layout.simple_list_item_1, arrayList)
             list.adapter = adapter
@@ -129,6 +132,7 @@ class MainActivity : AppCompatActivity() {
         val apiUrl = "https://api.getgeoapi.com/v2/currency/convert\n" +
                 "?api_key=$apiKey\n" +
                 "&from=$convertFrom&to=$convertTo&format=xml"
+
         val queue = Volley.newRequestQueue(this)
 
         val stringRequest = StringRequest(Request.Method.GET, apiUrl,
@@ -182,94 +186,7 @@ class MainActivity : AppCompatActivity() {
             })
 
         queue.add(stringRequest)
-    /*
-        //val apiKey = "fca_live_1lnNsBIpRPJ3UUnPVXkFexM95fBtQjC4Q8RhtIt3"
-        val apiKey = "efc063d720e7ffc336b270c167f3bc06d18173bc"
-        val apiUrl = "https://api.getgeoapi.com/v2/currency/convert\n" +
-                "?api_key=efc063d720e7ffc336b270c167f3bc06d18173bc\n" +
-                "&from=$convertFrom\n" +
-                "&to=$convertTo\n" +
-                "&amount=$amountToConvert\n" +
-                "&format=json"
 
-        //val apiUrl = "https://api.freecurrencyapi.com/v1/latest?apikey=$apiKey&base=$convertFrom&symbols=$convertTo"
-        val queue = Volley.newRequestQueue(this)
-
-        val stringRequest = StringRequest(Request.Method.GET, apiUrl,
-            { response ->
-                try {
-                    val jsonObject = JSONObject(response)
-                    val dataObject = jsonObject.getJSONObject("data")
-
-                    // Check if the currency code exists in the dataObject
-                    if (dataObject.has(convertTo)) {
-                        val convertVal = dataObject.getDouble(convertTo)
-                        val result = convertVal * amountToConvert
-
-                        runOnUiThread {
-                            conversionRate.text = result.toString()
-                        }
-                    } else {
-                        runOnUiThread {
-                            conversionRate.text = "Error: Conversion rate not available for $convertTo."
-                        }
-                    }
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    Log.e("JSONParsingError", "Error parsing JSON: $response")
-                    runOnUiThread {
-                        conversionRate.text =
-                            "$response, Error: An error occurred while parsing the conversion rate. See logs for details."
-                    }
-                }
-            },
-            { error ->
-                error.printStackTrace()
-                runOnUiThread {
-                    conversionRate.text = "Error: An error occurred while fetching conversion rate."
-                }
-            })
-
-        queue.add(stringRequest)
-        */
-
-        /*
-        val queue = Volley.newRequestQueue(this)
-
-        val stringRequest = StringRequest(Request.Method.GET, apiUrl,
-            { response ->
-                try {
-                    val jsonObject = JSONObject(response)
-
-                    //val conversionRateValue = round(jsonObject.getDouble("${convertFrom}_$convertTo"), 2)
-                    val key = "${convertFrom}_$convertTo"
-                    //val conversionRateValue = round(jsonObject.getDouble(key), 2)
-                    val convertVal = jsonObject.getDouble(key)
-
-                    println("Conversion Rate Value: $conversionRateValue")
-                    val result = conversionRateValue.toDouble() * amountToConvert
-                    val res = convertVal * amountToConvert
-                   //val result = "" + round((conversionRateValue * amountToConvert),2)
-                    println("Result: $result")
-                    runOnUiThread {
-                        // Assuming conversionRate is a TextView, set the result to it
-                        conversionRate.text = res.toString()
-                    }
-                    // Assuming conversionRate is a TextView, set the result to it
-                        //conversionRate.text = result.toString()
-                        //conversionRate.text = res.toString()
-
-                    // If you need to return the result for some reason, you might want to use a callback or update the UI differently
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-            },
-            { error ->
-                error.printStackTrace()
-            })
-
-        queue.add(stringRequest)
-        */
     }
 
     private fun round(value: Double, places: Int): Double {
@@ -279,11 +196,11 @@ class MainActivity : AppCompatActivity() {
     }
     private fun showPopup(title: String, message: String) {
         val popupDialog = Dialog(this@MainActivity)
-        popupDialog.setContentView(R.layout.popup) // Replace with your custom layout or use a system layout
+        popupDialog.setContentView(layout.popup) // Replace with your custom layout or use a system layout
 
-        val popupTitle: TextView = popupDialog.findViewById(R.id.popupTitle)
-        val popupMessage: TextView = popupDialog.findViewById(R.id.popupMessage)
-        val closeButton: Button = popupDialog.findViewById(R.id.closeButton)
+        val popupTitle: TextView = popupDialog.findViewById(id.popupTitle)
+        val popupMessage: TextView = popupDialog.findViewById(id.popupMessage)
+        val closeButton: Button = popupDialog.findViewById(id.closeButton)
 
         popupTitle.text = title
         popupMessage.text = message
