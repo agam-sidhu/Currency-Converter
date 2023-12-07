@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var convertFromDropdown: TextView
     private lateinit var convertToDropdown: TextView
     private lateinit var conversionRate: TextView
+    private lateinit var resultTextView: TextView
     private lateinit var amountToConvert: EditText
     private lateinit var convertButton: Button
     private lateinit var fromDialog: Dialog
@@ -42,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         convertToDropdown = findViewById(R.id.convertToMenu)
         convertButton = findViewById(R.id.convertButton)
         conversionRate = findViewById(R.id.conversionRateText)
+        resultTextView = findViewById(R.id.conversionResult)
         amountToConvert = findViewById(R.id.amountToConvertEditText)
 
         //This might be an issue 16 minutes
@@ -123,7 +126,47 @@ class MainActivity : AppCompatActivity() {
     private fun getConversionRate(convertFrom: String, convertTo: String, amountToConvert: Double) {
         val apiKey = "fca_live_1lnNsBIpRPJ3UUnPVXkFexM95fBtQjC4Q8RhtIt3"
         val apiUrl = "https://api.freecurrencyapi.com/v1/latest?apikey=$apiKey&base=$convertFrom&symbols=$convertTo"
+        val queue = Volley.newRequestQueue(this)
 
+        val stringRequest = StringRequest(
+            Request.Method.GET, apiUrl,
+            { response ->
+                try {
+                    val jsonObject = JSONObject(response)
+
+                    val key = "${convertFrom}_$convertTo"
+                    val convertVal = jsonObject.getDouble(key)
+
+                    val result = convertVal * amountToConvert
+
+                    // Print the result to log
+                    Log.d("ConversionResult", "Result: $result")
+
+                    // Print the result to the resultTextView
+                    runOnUiThread {
+                        resultTextView.text = "Result: $result"
+                    }
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                    // Handle JSON parsing exception
+                    // Print an error message to the resultTextView
+                    runOnUiThread {
+                        Log.e("JSONParsingError", "Error parsing JSON: $response")
+                        resultTextView.text = "Error: An error occurred while parsing the conversion rate."
+                    }
+                }
+            },
+            { error ->
+                error.printStackTrace()
+                // Handle Volley error
+                // Print an error message to the resultTextView
+                runOnUiThread {
+                    resultTextView.text = "Error: An error occurred while fetching conversion rate."
+                }
+            })
+
+        queue.add(stringRequest)
+        /*
         val queue = Volley.newRequestQueue(this)
 
         val stringRequest = StringRequest(Request.Method.GET, apiUrl,
@@ -135,9 +178,10 @@ class MainActivity : AppCompatActivity() {
                     val key = "${convertFrom}_$convertTo"
                     //val conversionRateValue = round(jsonObject.getDouble(key), 2)
                     val convertVal = jsonObject.getDouble(key)
+
                     println("Conversion Rate Value: $conversionRateValue")
                     val result = conversionRateValue.toDouble() * amountToConvert
-                    val res = convertVal* amountToConvert
+                    val res = convertVal * amountToConvert
                    //val result = "" + round((conversionRateValue * amountToConvert),2)
                     println("Result: $result")
                     runOnUiThread {
@@ -159,6 +203,7 @@ class MainActivity : AppCompatActivity() {
             })
 
         queue.add(stringRequest)
+        */
     }
 
     private fun round(value: Double, places: Int): Double {
