@@ -111,9 +111,10 @@ class MainActivity : AppCompatActivity() {
         }
         convertButton.setOnClickListener {
             try {
-                val amountToConvert = amountToConvert.text.toString().toDouble()
-                getConversionRate(convertFrom, convertTo, amountToConvert)
+                val amountToConvertValue = amountToConvert.text.toString().toDouble()
+                getConversionRate(convertFrom, convertTo, amountToConvertValue)
             } catch (e: Exception) {
+                showPopup("Error", "Invalid input. Please enter a valid number.")
                 // Handle the exception if needed
             }
         }
@@ -129,13 +130,23 @@ class MainActivity : AppCompatActivity() {
             { response ->
                 try {
                     val jsonObject = JSONObject(response)
-                    val conversionRateValue = round(jsonObject.getDouble("${convertFrom}_$convertTo"), 2)
 
+                    //val conversionRateValue = round(jsonObject.getDouble("${convertFrom}_$convertTo"), 2)
+                    val key = "${convertFrom}_$convertTo"
+                    //val conversionRateValue = round(jsonObject.getDouble(key), 2)
+                    val convertVal = jsonObject.getDouble(key)
                     println("Conversion Rate Value: $conversionRateValue")
-                    val result = "" + round((conversionRateValue * amountToConvert),2)
-
+                    val result = conversionRateValue.toDouble() * amountToConvert
+                    val res = convertVal* amountToConvert
+                   //val result = "" + round((conversionRateValue * amountToConvert),2)
+                    println("Result: $result")
+                    runOnUiThread {
+                        // Assuming conversionRate is a TextView, set the result to it
+                        conversionRate.text = res.toString()
+                    }
                     // Assuming conversionRate is a TextView, set the result to it
-                        conversionRate.text = result
+                        //conversionRate.text = result.toString()
+                        //conversionRate.text = res.toString()
 
 
                     // If you need to return the result for some reason, you might want to use a callback or update the UI differently
@@ -154,6 +165,23 @@ class MainActivity : AppCompatActivity() {
         if (places < 0) throw IllegalArgumentException()
         val bd = BigDecimal.valueOf(value)
         return bd.setScale(places, RoundingMode.HALF_UP).toDouble()
+    }
+    private fun showPopup(title: String, message: String) {
+        val popupDialog = Dialog(this@MainActivity)
+        popupDialog.setContentView(R.layout.popup) // Replace with your custom layout or use a system layout
+
+        val popupTitle: TextView = popupDialog.findViewById(R.id.popupTitle)
+        val popupMessage: TextView = popupDialog.findViewById(R.id.popupMessage)
+        val closeButton: Button = popupDialog.findViewById(R.id.closeButton)
+
+        popupTitle.text = title
+        popupMessage.text = message
+
+        closeButton.setOnClickListener {
+            popupDialog.dismiss()
+        }
+
+        popupDialog.show()
     }
 }
 
