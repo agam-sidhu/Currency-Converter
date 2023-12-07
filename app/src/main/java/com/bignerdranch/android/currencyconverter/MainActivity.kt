@@ -14,8 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import org.json.JSONException
-import org.json.JSONObject
+import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserFactory
+import java.io.StringReader
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -124,8 +125,74 @@ class MainActivity : AppCompatActivity() {
 
     }
     private fun getConversionRate(convertFrom: String, convertTo: String, amountToConvert: Double) {
-        val apiKey = "fca_live_1lnNsBIpRPJ3UUnPVXkFexM95fBtQjC4Q8RhtIt3"
-        val apiUrl = "https://api.freecurrencyapi.com/v1/latest?apikey=$apiKey&base=$convertFrom&symbols=$convertTo"
+        val apiKey = "efc063d720e7ffc336b270c167f3bc06d18173bc"
+        val apiUrl = "https://api.getgeoapi.com/v2/currency/convert\n" +
+                "?api_key=$apiKey\n" +
+                "&from=$convertFrom&to=$convertTo&format=xml"
+        val queue = Volley.newRequestQueue(this)
+
+        val stringRequest = StringRequest(Request.Method.GET, apiUrl,
+            { response ->
+                try {
+                    val factory = XmlPullParserFactory.newInstance()
+                    factory.isNamespaceAware = true
+                    val parser = factory.newPullParser()
+                    parser.setInput(StringReader(response))
+
+                    var eventType = parser.eventType
+                    var rate: String? = null
+
+                    while (eventType != XmlPullParser.END_DOCUMENT) {
+                        when (eventType) {
+                            XmlPullParser.START_TAG -> {
+                                val tagName = parser.name
+                                if (tagName == "rate") {
+                                    rate = parser.nextText()
+                                }
+                            }
+                            // Handle other XML events as needed
+                        }
+                        eventType = parser.next()
+                    }
+
+                    if (rate != null) {
+                        val result = rate.toDouble() * amountToConvert
+
+                        runOnUiThread {
+                            conversionRate.text = result.toString()
+                        }
+                    } else {
+                        runOnUiThread {
+                            conversionRate.text = "Error: Rate not found in XML response."
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Log.e("XMLParsingError", "Error parsing XML: $response")
+                    runOnUiThread {
+                        conversionRate.text = "Error: An error occurred while parsing the conversion rate. See logs for details."
+                    }
+                }
+            },
+            { error ->
+                error.printStackTrace()
+                runOnUiThread {
+                    conversionRate.text = "Error: An error occurred while fetching conversion rate."
+                }
+            })
+
+        queue.add(stringRequest)
+    /*
+        //val apiKey = "fca_live_1lnNsBIpRPJ3UUnPVXkFexM95fBtQjC4Q8RhtIt3"
+        val apiKey = "efc063d720e7ffc336b270c167f3bc06d18173bc"
+        val apiUrl = "https://api.getgeoapi.com/v2/currency/convert\n" +
+                "?api_key=efc063d720e7ffc336b270c167f3bc06d18173bc\n" +
+                "&from=$convertFrom\n" +
+                "&to=$convertTo\n" +
+                "&amount=$amountToConvert\n" +
+                "&format=json"
+
+        //val apiUrl = "https://api.freecurrencyapi.com/v1/latest?apikey=$apiKey&base=$convertFrom&symbols=$convertTo"
         val queue = Volley.newRequestQueue(this)
 
         val stringRequest = StringRequest(Request.Method.GET, apiUrl,
@@ -152,7 +219,7 @@ class MainActivity : AppCompatActivity() {
                     Log.e("JSONParsingError", "Error parsing JSON: $response")
                     runOnUiThread {
                         conversionRate.text =
-                            "Error: An error occurred while parsing the conversion rate. See logs for details."
+                            "$response, Error: An error occurred while parsing the conversion rate. See logs for details."
                     }
                 }
             },
@@ -164,6 +231,8 @@ class MainActivity : AppCompatActivity() {
             })
 
         queue.add(stringRequest)
+        */
+
         /*
         val queue = Volley.newRequestQueue(this)
 
