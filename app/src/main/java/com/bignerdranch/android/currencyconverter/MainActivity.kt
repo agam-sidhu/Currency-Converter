@@ -340,7 +340,7 @@ class MainActivity : AppCompatActivity() {
                         val result = rate.toDouble() * amountToConvert
 
                         runOnUiThread {
-                            conversionRate.text = result.toString()
+                            conversionRate.text = result.toString() + " $convertTo"
                             exchangeRateView.text = "1 $convertFrom = $rate $convertTo"
 
                         }
@@ -384,7 +384,7 @@ class MainActivity : AppCompatActivity() {
         val closeButton: Button = popupDialog.findViewById(id.closeButton)
 
         popupTitle.text = title
-        popupMessage.text = message
+        popupMessage.text = "Invalid Input (Missing Necessary Currency Input"
 
         closeButton.setOnClickListener {
             popupDialog.dismiss()
