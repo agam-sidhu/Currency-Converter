@@ -128,40 +128,38 @@ class MainActivity : AppCompatActivity() {
         val apiUrl = "https://api.freecurrencyapi.com/v1/latest?apikey=$apiKey&base=$convertFrom&symbols=$convertTo"
         val queue = Volley.newRequestQueue(this)
 
-        val stringRequest = StringRequest(
-            Request.Method.GET, apiUrl,
+        val stringRequest = StringRequest(Request.Method.GET, apiUrl,
             { response ->
                 try {
                     val jsonObject = JSONObject(response)
+                    val dataObject = jsonObject.getJSONObject("data")
 
-                    val key = "${convertFrom}_$convertTo"
-                    val convertVal = jsonObject.getDouble(key)
+                    // Check if the currency code exists in the dataObject
+                    if (dataObject.has(convertTo)) {
+                        val convertVal = dataObject.getDouble(convertTo)
+                        val result = convertVal * amountToConvert
 
-                    val result = convertVal * amountToConvert
-
-                    // Print the result to log
-                    Log.d("ConversionResult", "Result: $result")
-
-                    // Print the result to the resultTextView
-                    runOnUiThread {
-                        resultTextView.text = "Result: $result"
+                        runOnUiThread {
+                            conversionRate.text = result.toString()
+                        }
+                    } else {
+                        runOnUiThread {
+                            conversionRate.text = "Error: Conversion rate not available for $convertTo."
+                        }
                     }
                 } catch (e: JSONException) {
                     e.printStackTrace()
-                    // Handle JSON parsing exception
-                    // Print an error message to the resultTextView
+                    Log.e("JSONParsingError", "Error parsing JSON: $response")
                     runOnUiThread {
-                        Log.e("JSONParsingError", "Error parsing JSON: $response")
-                        resultTextView.text = "Error: An error occurred while parsing the conversion rate."
+                        conversionRate.text =
+                            "Error: An error occurred while parsing the conversion rate. See logs for details."
                     }
                 }
             },
             { error ->
                 error.printStackTrace()
-                // Handle Volley error
-                // Print an error message to the resultTextView
                 runOnUiThread {
-                    resultTextView.text = "Error: An error occurred while fetching conversion rate."
+                    conversionRate.text = "Error: An error occurred while fetching conversion rate."
                 }
             })
 
