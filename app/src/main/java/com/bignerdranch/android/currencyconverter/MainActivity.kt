@@ -190,7 +190,6 @@ class MainActivity : AppCompatActivity() {
                         //conversionRate.text = result.toString()
                         //conversionRate.text = res.toString()
 
-
                     // If you need to return the result for some reason, you might want to use a callback or update the UI differently
                 } catch (e: JSONException) {
                     e.printStackTrace()
